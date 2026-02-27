@@ -338,7 +338,7 @@ button:disabled{
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  padding:100px;
+  padding:10px;
   z-index:50;
   overflow:auto;
   overscroll-behavior: contain;
