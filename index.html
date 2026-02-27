@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Identifying Diatonic Notes in Major Scales</title>
+<link href="style.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+<!-- Optional title images (match the newer games). If you don't have images/, replace with an <h1>. -->
+<div aria-label="Identifying Diatonic Notes in Major Scales" class="app-titleWrap titleModeWide" id="titleWrap">
+<img alt="Identifying Diatonic Notes in Major Scales" class="app-titleImg app-titleImgWide" id="titleImgWide" src="images/title.png"/>
+<img alt="Identifying Diatonic Notes in Major Scales" class="app-titleImg app-titleImgWrapped" id="titleImgWrapped" src="images/titlewrapped.png"/>
+</div>
+</header>
+<!-- Actions -->
+<section aria-label="top actions" class="controlsPanel controlsPanelActions">
+<div class="control">
+<div class="actionsRow actionsCentered">
+  <div class="actionsStack">
+    <div class="actionsRow actionsCentered">
+      <button disabled="" id="tonicBtn" type="button">Reference - Play Scale</button>
+      <button disabled="" id="refTonicBtn" type="button">Reference - Play Tonic</button>
+      <button id="settingsBtn" type="button">Game Settings</button>
+    </div>
+
+    <div class="actionsRow actionsCentered">
+      <button disabled="" id="replayBtn" type="button">Replay Note</button>
+      <button disabled="" id="nextBtn" type="button">Next</button>
+      <button id="infoBtn" type="button">Information</button>
+      <button class="primary pulse" id="beginBtn" type="button">Begin Game</button>
+    </div>
+
+    </div>
+  </div>
+</div>
+<div aria-live="polite" class="feedbackLine" id="feedbackOut">Press <strong>Begin Game</strong> to start.</div>
+</section>
+<!-- Answers -->
+<section aria-label="answers" class="controlsPanel controlsPanelActions">
+<div class="control">
+<div aria-label="note answers" class="answerGrid" id="answerButtons"></div>
+</div>
+</section>
+<!-- Status + mini scale SVG + pills -->
+<section aria-label="status" class="statusPanel">
+<div class="statusRow">
+<div aria-label="Scale keyboard (C3 to C5)" class="scaleMiniWrap">
+<div aria-label="Scale display" class="mount miniMount miniMountInCard" id="scaleMount"></div>
+</div>
+<div class="statusText">
+<div class="phaseTitle" id="phaseTitle">Ready</div>
+
+</div>
+</div>
+</section>
+<!-- Score Card -->
+<section aria-label="score" class="analysis">
+<div class="analysisGrid">
+<div class="analysisCard scoreCardNarrow">
+<div class="analysisLabel">Score Card</div>
+<div class="scoreMeta" id="scoreMeta">Scale: — • Range: —</div>
+<div class="scoreGrid scoreGridVertical">
+<div class="scoreItem"><span class="scoreK">Correct</span><span class="scoreV" id="correctOut">0</span></div>
+<div class="scoreItem"><span class="scoreK">Incorrect</span><span class="scoreV" id="incorrectOut">0</span></div>
+<div class="scoreItem"><span class="scoreK">Total Questions Asked</span><span class="scoreV" id="totalOut">0</span></div>
+<div class="scoreItem"><span class="scoreK">Percentage Correct</span><span class="scoreV" id="accuracyOut">0.0%</span></div>
+</div>
+<div class="scoreActions">
+  <input id="playerNameInput" type="text" inputmode="text" autocomplete="name" maxlength="32" placeholder="Click to enter your name" />
+  <div>
+  <div class="scoreActions">
+    <button id="downloadScorecardBtn" type="button">Download Scorecard</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Feedback -->
+<!-- Intro modal -->
+<div aria-labelledby="introTitle" aria-modal="true" class="modal" id="introModal" role="dialog">
+<div class="modalCard">
+  <img class="app-titleImg" src="images/title.png">
+  <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px; margin-bottom: 8px; flex-wrap: wrap;">
+    
+    <div class="inlineControl">
+      <div class="settingsLabel">Starting Major Scale</div>
+      <select aria-label="Select major scale for the game" class="compactSelect compactSelectAuto" id="introScaleSelect"></select>
+    </div>
+
+    <div class="inlineControl">
+      <div class="settingsLabel">Starting Note Range</div>
+      <select aria-label="Select note range for the game" class="compactSelect compactSelectAuto" id="introRangeSelect"></select>
+    </div>
+  </div>
+  <div class="modalActions modalActionsCentered" style="margin-bottom: 14px;">
+    <button class="primary pulse" id="introBeginBtnTop" type="button">Continue To Game</button>
+  </div>
+<div class="modalTitle" id="introTitle">How to Play</div>
+<div class="modalBody">
+<p>Relative pitch is the skill we use to identify notes that would otherwise be unknown, based on their relationship to a known note - often called a 'reference' pitch. Ie if the note 'C' is played, a person with good relative pitch skills would be able to identify another note at random, for example a 'G' based on their understanding of it's relationship to 'C'. They might be able to hum an 'Eb' becuase they can hear in their head the note that is 3 semitones up in pitch from the given note, 'C'.
+
+        In this game you’ll hear a random note from the selected major scale. Identify the note using the answer buttons - they display the note names and scale degrees for the Major scale you have selected.
+        
+        Use <strong>Replay Note</strong> or <strong>'R'</strong> to hear the note again, and <strong>Next</strong> or <strong>Space</strong> for the next note. You can use the <strong>reference</strong> buttons to hear the selected scale or it's tonic and you can change the settings anytime in the <strong>Game Settings</strong> menu.
+
+You can also download a score card .png should you like!
+</div>
+<div class="modalActions modalActionsCentered" style="margin-bottom: 2px;">
+<button class="primary pulse" id="introBeginBtn" type="button">Continue To Game</button>
+</div>
+</div>
+</div>
+<!-- Settings modal -->
+<div aria-labelledby="settingsTitle" aria-modal="true" class="modal hidden" id="settingsModal" role="dialog">
+  <div class="modalCard">
+    <div class="modalTitle" id="settingsTitle">Game Settings ⚙️</div>
+    <div class="modalBody">
+      <p style="margin:0 0 12px;">Choose which scale to use, and what note range. Note, applying new settings will restart the game and reset the score!</p>
+      <div class="settingsGrid">
+        <div class="settingsLabel">Major Scale</div>
+        <select aria-label="Select major scale for the game" class="compactSelect compactSelectAuto" id="settingsScaleSelect"></select>
+        <div class="settingsLabel">Note Range</div>
+        <select aria-label="Select note range for the game" class="compactSelect compactSelectAuto" id="settingsRangeSelect"></select>
+      </div>
+    </div>
+    <div class="modalActions">
+      <button class="confirmPrimary" id="settingsRestartBtn" type="button">Restart Game With New Settings</button>
+      <button id="settingsCancelBtn" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Info modal -->
+<div aria-labelledby="infoTitle" aria-modal="true" class="modal hidden" id="infoModal" role="dialog">
+<div class="modalCard">
+<div class="modalTitle" id="infoTitle">Information</div>
+<div class="modalBody" id="infoBody">
+  <p>Relative pitch is the skill we use to identify notes that would otherwise be unknown, based on their relationship to a known note - often called a 'reference' pitch. Ie if the note 'C' is played, a person with good relative pitch skills would be able to identify another note at random, for example a 'G' based on their understanding of it's relationship to 'C'. They might be able to hum an 'Eb' becuase they can hear in their head the note that is 3 semitones up in pitch from the given note, 'C'.
+
+    In this game you’ll hear a random note from the selected major scale. Identify the note using the answer buttons - they display the note names and scale degrees for the Major scale you have selected.
+    
+    Use <strong>Replay Note</strong> or <strong>'R'</strong> to hear the note again, and <strong>Next</strong> or <strong>Space</strong> for the next note. You can use the <strong>reference</strong> buttons to hear the selected scale or it's tonic and you can change the settings anytime in the <strong>Game Settings</strong> menu.
+
+You can also download a score card .png should you like!
+<div class="modalActions">
+<button class="primary" id="infoClose" type="button">Close</button>
+</div>
+</div>
+</div>
+<script src="script.js"></script>
+</div></body>
+</html>
