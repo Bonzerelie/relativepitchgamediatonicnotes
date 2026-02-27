@@ -1424,46 +1424,38 @@ settingsRangeSelect.addEventListener("change", updateSettingsDirtyUi);
   });
 
   settingsRestartBtn.addEventListener("click", () => {
-    if (settingsRestartBtn.disabled) return;
+      if (settingsRestartBtn.disabled) return;
+      const newKey = String(settingsScaleSelect.value || "C");
+      const newRange = String(settingsRangeSelect.value || "one");
   
-    // 1. Grab the newly selected settings
-    const newKey = String(settingsScaleSelect.value || "C");
-    const newRange = String(settingsRangeSelect.value || "one");
+      saveKey(newKey);
+      saveRange(newRange);
+      stopAllNotesWithUi(0.06);
+      stopAllUiSounds();
+      clearRefScaleTimer();
+      setRefScalePlaying(false);
 
-    // 2. Save them to local storage
-    saveKey(newKey);
-    saveRange(newRange);
-    
-    // 3. Stop any audio or reference scales currently playing
-    stopAllNotesWithUi(0.06);
-    stopAllUiSounds();
-    clearRefScaleTimer();
-    setRefScalePlaying(false);
-
-    // 4. Fully reset the game state back to the beginning
-    state.started = false;
-    state.awaitingNext = false;
-    state.target = null;
-    state.lastPitch = null;
-    
-    // 5. Clear the board and score
-    clearAnswerButtonStates();
-    resetScore();
-
-    // 6. Apply the new settings to the UI and close modal
-    applyRangeMode(newRange);
-    applyScaleKey(newKey);
-    closeModal(settingsModal);
-
-    // 7. Update the text and controls back to the initial Ready screen
-    setPhase("Ready");
-    setFeedback("Press <strong>Begin Game</strong> to start.");
-    updateControls();
-
-    // 8. BRING BACK THE INTRO MODAL
-    openModal(introModal);
-    try { introBeginBtn.focus(); } catch {}
-  });
+      playUiSound(UI_SND_SELECT)
+  
+      state.started = false;
+      state.awaitingNext = false;
+      state.target = null;
+      state.lastDegreeIdx = null;
+      state.lastOct = null;
+      
+      clearAnswerButtonStates();
+      resetScore();
+      applyRangeMode(newRange);
+      applyScaleKey(newKey);
+      closeModal(settingsModal);
+  
+      setPhase("Ready");
+      setFeedback("Press <strong>Begin Game</strong> to start.");
+      updateControls();
+      
+      // 👇 Focus the main game button instead of opening the intro modal
+      try { beginBtn.focus(); } catch {}
+    });
 
   // ---------------- intro modal ----------------
   // ---------------- intro modal ----------------
