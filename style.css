@@ -146,8 +146,10 @@ button:disabled{
   gap:10px;
   flex-wrap:wrap;
 }
-.actionsRow > *{ flex: 0 0 auto; }
-.actionsCentered{justify-content:center}
+.actionsRow > *{ 
+  flex: 0 1 auto; 
+  max-width: 100%;
+}.actionsCentered{justify-content:center}
 
 .actionsStack{
   display:flex;
@@ -176,7 +178,7 @@ button:disabled{
   display:flex;
   align-items:stretch;
   justify-content:center;
-  gap:10px;
+  gap:8px;
   padding: 2px;
   width: 100%;
   max-width: var(--answers-max);
