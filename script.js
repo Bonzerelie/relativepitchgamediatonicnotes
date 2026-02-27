@@ -740,8 +740,8 @@ async function downloadScorecardPng() {
   const total = scoreTotal();
   const accuracy = `${scoreAccuracy().toFixed(1)}%`;
 
-  const W = 920;
-  const H = 560;
+  const W = 720;
+  const H = 640;
   const dpr = Math.max(1, Math.floor((window.devicePixelRatio || 1) * 100) / 100);
 
   const canvas = document.createElement("canvas");
@@ -789,7 +789,7 @@ async function downloadScorecardPng() {
   ctx.font = "900 26px Arial, Helvetica, sans-serif";
   ctx.fillText("Score Card", W / 2, yCursor + 22);
 
-  ctx.font = "800 14px Arial, Helvetica, sans-serif";
+  ctx.font = "800 18px Arial, Helvetica, sans-serif";
   ctx.fillStyle = "rgba(0,0,0,0.70)";
   const metaLine = `Scale: ${scale}   •   Range: ${range}`;
   ctx.fillText(metaLine, W / 2, yCursor + 52);
