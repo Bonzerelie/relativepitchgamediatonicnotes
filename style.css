@@ -59,7 +59,7 @@ body{
   -webkit-user-drag:none;
   padding-bottom: 10px;
 }
-.app-titleImgWide{ width: 100%; max-width: 500px; } /* Fixed scaling */
+.app-titleImgWide{ width: 100%; max-width: 700px; } /* Fixed scaling */
 .app-titleImgWrapped{ width:min(220px, 55vw); }
 .titleModeWide .app-titleImgWide{ display:block; }
 .titleModeWide .app-titleImgWrapped{ display:none; }
