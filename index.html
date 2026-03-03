@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -10,13 +9,12 @@
 <body>
 <div class="app">
 <header class="hero">
-<!-- Optional title images (match the newer games). If you don't have images/, replace with an <h1>. -->
 <div aria-label="Identifying Diatonic Notes in Major Scales" class="app-titleWrap titleModeWide" id="titleWrap">
 <img alt="Identifying Diatonic Notes in Major Scales" class="app-titleImg app-titleImgWide" id="titleImgWide" src="images/title.png"/>
 <img alt="Identifying Diatonic Notes in Major Scales" class="app-titleImg app-titleImgWrapped" id="titleImgWrapped" src="images/titlewrapped.png"/>
 </div>
 </header>
-<!-- Actions -->
+
 <section aria-label="top actions" class="controlsPanel controlsPanelActions">
 <div class="control">
 <div class="actionsRow actionsCentered">
@@ -39,13 +37,13 @@
 </div>
 <div aria-live="polite" class="feedbackLine" id="feedbackOut">Press <strong>Begin Game</strong> to start.</div>
 </section>
-<!-- Answers -->
+
 <section aria-label="answers" class="controlsPanel controlsPanelActions">
 <div class="control">
 <div aria-label="note answers" class="answerGrid" id="answerButtons"></div>
 </div>
 </section>
-<!-- Status + mini scale SVG + pills -->
+
 <section aria-label="status" class="statusPanel">
 <div class="statusRow">
 <div aria-label="Scale keyboard (C3 to C5)" class="scaleMiniWrap">
@@ -53,33 +51,36 @@
 </div>
 <div class="statusText">
 <div class="phaseTitle" id="phaseTitle">Ready</div>
-
 </div>
 </div>
 </section>
-<!-- Score Card -->
+
 <section aria-label="score" class="analysis">
 <div class="analysisGrid">
 <div class="analysisCard scoreCardNarrow">
 <div class="analysisLabel">Score Card</div>
-<div class="scoreMeta" id="scoreMeta">Scale: — • Range: —</div>
+<div class="scoreMeta" id="scoreMeta">Scale: — • Range: — • Notes: —</div>
+
+<div class="scoreActions" style="margin-bottom: 16px;">
+  <input id="playerNameInput" type="text" inputmode="text" autocomplete="name" maxlength="32" placeholder="Click to enter your name" />
+  <button id="downloadScorecardBtn" type="button">Download Scorecard</button>
+</div>
+
 <div class="scoreGrid scoreGridVertical">
 <div class="scoreItem"><span class="scoreK">Correct</span><span class="scoreV" id="correctOut">0</span></div>
 <div class="scoreItem"><span class="scoreK">Incorrect</span><span class="scoreV" id="incorrectOut">0</span></div>
 <div class="scoreItem"><span class="scoreK">Total Questions Asked</span><span class="scoreV" id="totalOut">0</span></div>
-<div class="scoreItem"><span class="scoreK">Percentage Correct</span><span class="scoreV" id="accuracyOut">0.0%</span></div>
+<div class="scoreItem"><span class="scoreK">Total Percentage Correct</span><span class="scoreV" id="accuracyOut">0.0%</span></div>
 </div>
-<div class="scoreActions">
-  <input id="playerNameInput" type="text" inputmode="text" autocomplete="name" maxlength="32" placeholder="Click to enter your name" />
-  <div>
-  <div class="scoreActions">
-    <button id="downloadScorecardBtn" type="button">Download Scorecard</button>
-</div>
+
+<div class="analysisLabel" style="margin-top: 16px;">Per Note:</div>
+<div class="perNoteGrid" id="perNoteOut"></div>
+
+
 </div>
 </div>
 </section>
-<!-- Feedback -->
-<!-- Intro modal -->
+
 <div aria-labelledby="introTitle" aria-modal="true" class="modal" id="introModal" role="dialog">
 <div class="modalCard">
   <img class="app-titleImg" src="images/title.png">
@@ -94,6 +95,12 @@
       <div class="settingsLabel">Starting Note Range</div>
       <select aria-label="Select note range for the game" class="compactSelect compactSelectAuto" id="introRangeSelect"></select>
     </div>
+
+    <div class="inlineControl">
+        <div class="settingsLabel">Included Notes</div>
+        <select aria-label="Select number of notes to include" class="compactSelect compactSelectAuto" id="introNotesSelect"></select>
+      </div>
+
   </div>
   <div class="modalActions modalActionsCentered" style="margin-bottom: 16px;">
     <button class="primary pulse" id="introBeginBtnTop" type="button">Continue To Game</button>
@@ -106,14 +113,14 @@
         
         Use <strong>Replay Note</strong> or <strong>'R'</strong> to hear the note again, and <strong>Next</strong> or <strong>Space</strong> for the next note. You can use the <strong>reference</strong> buttons to hear the selected scale or it's tonic and you can change the settings anytime in the <strong>Game Settings</strong> menu.
 
-You can also download a score card .png should you like!
+You can also download a score card .png should you like!</p>
 </div>
 <div class="modalActions modalActionsCentered" style="margin-bottom: 2px;">
 <button class="primary pulse" id="introBeginBtn" type="button">Continue To Game</button>
 </div>
 </div>
 </div>
-<!-- Settings modal -->
+
 <div aria-labelledby="settingsTitle" aria-modal="true" class="modal hidden" id="settingsModal" role="dialog">
   <div class="modalCard">
     <div class="modalTitle" id="settingsTitle">Game Settings ⚙️</div>
@@ -122,8 +129,12 @@ You can also download a score card .png should you like!
       <div class="settingsGrid">
         <div class="settingsLabel">Major Scale</div>
         <select aria-label="Select major scale for the game" class="compactSelect compactSelectAuto" id="settingsScaleSelect"></select>
+        
         <div class="settingsLabel">Note Range</div>
         <select aria-label="Select note range for the game" class="compactSelect compactSelectAuto" id="settingsRangeSelect"></select>
+
+        <div class="settingsLabel">Included Notes</div>
+        <select aria-label="Select number of notes to include" class="compactSelect compactSelectAuto" id="settingsNotesSelect"></select>
       </div>
     </div>
     <div class="modalActions">
@@ -133,7 +144,43 @@ You can also download a score card .png should you like!
   </div>
 </div>
 
-<!-- Info modal -->
+<div aria-labelledby="scoreModalTitle" aria-modal="true" class="modal hidden" id="scoreModal" role="dialog">
+  <div class="modalCard">
+    <div class="modalTitle" id="scoreModalTitle" style="margin-bottom: 16px;">Current game ended - here's your scorecard!</div>
+    <div class="modalBody">
+      
+      <div class="analysisGrid" style="width: 100%;">
+        <div class="analysisCard scoreCardNarrow">
+          <div class="analysisLabel">Score Card</div>
+          <div class="scoreMeta" id="modalScoreMeta">Scale: — • Range: — • Notes: —</div>
+
+          <div class="scoreActions" style="margin-bottom: 16px;">
+            <input id="modalPlayerNameInput" type="text" inputmode="text" autocomplete="name" maxlength="32" placeholder="Click to enter your name" />
+            <button id="modalDownloadScorecardBtn" type="button">Download Scorecard</button>
+          </div>
+
+          <div class="scoreGrid scoreGridVertical">
+            <div class="scoreItem"><span class="scoreK">Correct</span><span class="scoreV" id="modalCorrectOut">0</span></div>
+            <div class="scoreItem"><span class="scoreK">Incorrect</span><span class="scoreV" id="modalIncorrectOut">0</span></div>
+            <div class="scoreItem"><span class="scoreK">Total Questions Asked</span><span class="scoreV" id="modalTotalOut">0</span></div>
+            <div class="scoreItem"><span class="scoreK">Total Percentage Correct</span><span class="scoreV" id="modalAccuracyOut">0.0%</span></div>
+          </div>
+
+          <div class="analysisLabel" style="margin-top: 16px;">Per Note:</div>
+          <div class="perNoteGrid" id="modalPerNoteOut"></div>
+          
+          <div class="scoreFooter">Identifying Diatonic Notes in Major Scales</div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="modalActions modalActionsCentered" style="margin-top: 16px;">
+      <button class="primary pulse" id="scoreModalContinueBtn" type="button">Continue</button>
+    </div>
+  </div>
+</div>
+
 <div aria-labelledby="infoTitle" aria-modal="true" class="modal hidden" id="infoModal" role="dialog">
 <div class="modalCard">
 <div class="modalTitle" id="infoTitle">Information</div>
@@ -144,7 +191,7 @@ You can also download a score card .png should you like!
     
     Use <strong>Replay Note</strong> or <strong>'R'</strong> to hear the note again, and <strong>Next</strong> or <strong>Space</strong> for the next note. You can use the <strong>reference</strong> buttons to hear the selected scale or it's tonic and you can change the settings anytime in the <strong>Game Settings</strong> menu.
 
-You can also download a score card .png should you like!
+You can also download a score card .png should you like!</p>
 <div class="modalActions">
 <button class="primary" id="infoClose" type="button">Close</button>
 </div>
